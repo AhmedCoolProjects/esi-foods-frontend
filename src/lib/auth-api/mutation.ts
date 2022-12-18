@@ -19,9 +19,18 @@ export async function registerUser({ email, password }: { email: string; passwor
 }
 
 export async function loginUser({ email, password }: { email: string; password: string }) {
-	const { data } = await AxiosAuthMicroservice.post('/auth/login', {
+	 await AxiosAuthMicroservice.post('/auth/login', {
 		email,
 		password
+	})
+	.then((response) => {
+		user.set({
+			email: response.data.email,
+			uid: response.data.uid,
+			isVerified: response.data.isVerified
+		});
+	})
+	.catch((error) => {
+		console.log(error);
 	});
-	return data;
 }

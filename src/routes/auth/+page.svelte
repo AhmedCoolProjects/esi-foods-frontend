@@ -1,20 +1,40 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { loginUser, registerUser } from '$lib/auth-api/mutation';
+	import { user } from '$lib/store';
+	import { onMount } from 'svelte';
+	import { writable, type Writable } from 'svelte/store';
 
 	let isLogin: boolean = true;
 	let email: string = '';
 	let password: string = '';
+	const isLoginRegistering: Writable<boolean> = writable(false);
 
+	// FUNCTIONS
 	const handleLogin = () => {
 		isLogin = !isLogin;
 	};
-
 	const registerFct = async () => {
+		isLoginRegistering.set(true);
 		await registerUser({ email, password }).then((res) => {
-			goto('/');
+			isLoginRegistering.set(false);
+			if ($user.uid) goto('/');
+			else alert('Try again please');
 		});
 	};
+	const loginFct = async () => {
+		isLoginRegistering.set(true);
+		await loginUser({ email, password }).then((res) => {
+			isLoginRegistering.set(false);
+			if ($user.uid) goto('/');
+			else alert('Wrong credentials');
+		});
+	};
+	// ON MOUNT
+	onMount(() => {
+		// if there's a user logged in, redirect to home
+		if ($user.uid) goto('/');
+	});
 </script>
 
 <svelte:head>
@@ -36,17 +56,6 @@
 				Register
 			{/if}
 		</h1>
-		<!-- <div class="form-control w-full min-w-[350px]">
-			<label for="username" class="label">
-				<span class="label-text">Username?</span>
-			</label>
-			<input
-				name="username"
-				type="text"
-				placeholder="Type here .."
-				class="input input-bordered w-full"
-			/>
-		</div> -->
 		<div class="form-control w-full min-w-[350px]">
 			<label for="email" class="label">
 				<span class="label-text">Email?</span>
@@ -74,15 +83,15 @@
 		<div class="flex flex-row items-end justify-end w-full mt-4">
 			{#if isLogin}
 				<h2>
-					Don't have an account? <span on:click={handleLogin} class="text-gray-400 cursor-pointer"
-						>Register</span
-					>
+					<!-- svelte-ignore a11y-click-events-have-key-events -->
+					Don't have an account?
+					<span on:click={handleLogin} class="text-gray-400 cursor-pointer">Register</span>
 				</h2>
 			{:else}
 				<h2>
-					Already have an account? <span on:click={handleLogin} class="text-gray-400 cursor-pointer"
-						>Login</span
-					>
+					<!-- svelte-ignore a11y-click-events-have-key-events -->
+					Already have an account?
+					<span on:click={handleLogin} class="text-gray-400 cursor-pointer">Login</span>
 				</h2>
 			{/if}
 		</div>
@@ -90,14 +99,16 @@
 			disabled={!email || !password}
 			on:click={() => {
 				if (isLogin) {
-					loginUser({ email, password });
+					loginFct();
 				} else {
 					registerFct();
 				}
 			}}
 			class="btn mt-8 w-full"
 		>
-			{#if isLogin}
+			{#if $isLoginRegistering}
+				Authenticating...
+			{:else if isLogin}
 				Login
 			{:else}
 				Register
