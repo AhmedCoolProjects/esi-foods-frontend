@@ -1,66 +1,16 @@
 <script lang="ts">
 	import { FirstSection } from '$lib/components';
 	import { Navbar } from '$lib/components';
+	import { getAllProducts } from '$lib/products-api/query';
 	import type { ProductProps } from '$lib/types';
+	import { onMount } from 'svelte';
+	import { writable, type Writable } from 'svelte/store';
 
-	const products: ProductProps[] = [
-		{
-			title: 'Product 1',
-			price: 10.99,
-			description: 'this is the description 1',
-			image: '/burger.png',
-			_id: '1',
-			tags: ['tag1', 'tag2']
-		},
-		{
-			title: 'Product 1',
-			price: 10.99,
-			description: 'this is the description 1',
-			image: '/burger.png',
-			_id: '1',
-			tags: ['tag1', 'tag2']
-		},
-		{
-			title: 'Product 1',
-			price: 10.99,
-			description: 'this is the description 1',
-			image: '/burger.png',
-			_id: '1',
-			tags: ['tag1', 'tag2']
-		},
-		{
-			title: 'Product 1',
-			price: 10.99,
-			description: 'this is the description 1',
-			image: '/burger.png',
-			_id: '1',
-			tags: ['tag1', 'tag2']
-		},
-		{
-			title: 'Product 1',
-			price: 10.99,
-			description: 'this is the description 1',
-			image: '/burger.png',
-			_id: '1',
-			tags: ['tag1', 'tag2']
-		},
-		{
-			title: 'Product 1',
-			price: 10.99,
-			description: 'this is the description 1',
-			image: '/burger.png',
-			_id: '1',
-			tags: ['tag1', 'tag2']
-		},
-		{
-			title: 'Product 1',
-			price: 10.99,
-			description: 'this is the description 1',
-			image: '/burger.png',
-			_id: '1',
-			tags: ['tag1', 'tag2']
-		}
-	];
+	const productsData: Writable<ProductProps[]> = writable([]);
+
+	onMount(async () => {
+		await getAllProducts(productsData);
+	});
 </script>
 
 <svelte:head>
@@ -70,5 +20,5 @@
 <Navbar />
 
 <div class="w-full bg-[#EAE5D9] py-8 px-24">
-	<FirstSection {products} />
+	<FirstSection products={$productsData} />
 </div>

@@ -16,11 +16,12 @@ export const AxiosStorageMicroservice = axios.create({
 	baseURL: STORAGE_MICROSERVICE_LINK,
 	headers: {
 		accept: 'application/json',
-		'Content-Type': 'application/json'
+		'Content-Type': 'application/json',
+		
 	}
 });
 
-const PRODUCTS_MICROSERVICE_LINK = "https://esi-foods-products-api.vercel.app/api";
+const PRODUCTS_MICROSERVICE_LINK = "https://esi-foods-products.vercel.app/api";
 
 export const AxiosProductsMicroservice = axios.create({
 	baseURL: PRODUCTS_MICROSERVICE_LINK,

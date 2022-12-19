@@ -1,5 +1,13 @@
-<script>
+<script lang="ts">
+	import { goto } from '$app/navigation';
+	import { logoutUser } from '$lib/auth-api/mutation';
 	import { user } from '$lib/store';
+
+	const logoutFct = async () => {
+		await logoutUser().then(() => {
+			if (!$user.uid) goto('/auth');
+		});
+	};
 </script>
 
 <div class="navbar bg-base-100 p-8 flex-row items-center justify-between">
@@ -30,22 +38,24 @@
 			{/if}
 		</p>
 		<div class="dropdown dropdown-end">
+			<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 			<label for="avatar" tabindex="0" class="btn btn-ghost btn-circle avatar">
-				<img class="w-10 rounded-full object-cover" src="/avatar.png" alt="avatar" />
+				{#if $user.photoUrl}
+					<img class="w-10 rounded-full object-cover" src={$user.photoUrl} alt="avatar" />
+				{:else}
+					<img class="w-10 rounded-full object-cover" src="/avatar.png" alt="avatar" />
+				{/if}
 			</label>
 			<ul
 				tabindex="0"
 				class="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52"
 			>
-				<li>
-					{#if $user.uid}
-						<a href="/profile"> Profile </a>
-					{:else}
-						<a href="/auth"> Login </a>
-					{/if}
-				</li>
-				<li><a>Settings</a></li>
-				<li><a>Logout</a></li>
+				{#if $user.uid}
+					<li><a href="/profile"> Profile </a></li>
+					<li on:click={logoutFct}><a>Logout</a></li>
+				{:else}
+					<li><a href="/auth"> Login </a></li>
+				{/if}
 			</ul>
 		</div>
 	</div>

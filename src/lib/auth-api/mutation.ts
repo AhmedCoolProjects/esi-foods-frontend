@@ -24,12 +24,13 @@ export async function loginUser({ email, password }: { email: string; password: 
 		password
 	})
 		.then((response) => {
+			console.log("response.data: ", response.data);
 			user.set({
 				email: response.data.email,
 				uid: response.data.uid,
 				isVerified: response.data.isVerified,
 				displayName: response.data.displayName,
-				photoUrl: response.data.photoUrl
+				photoUrl: response.data.photoURL
 			});
 		})
 		.catch((error) => {
@@ -46,9 +47,26 @@ export async function updateUsername({ displayName }: { displayName: string }) {
 				user.displayName = displayName;
 				return user;
 			});
-			alert("Updated Username");
+			alert('Updated Username');
 		})
 		.catch((error) => {
 			console.log(error);
 		});
 }
+
+export const logoutUser = async () => {
+	await AxiosAuthMicroservice.post('/auth/logout')
+		.then((response) => {
+			user.set({
+				email: '',
+				uid: '',
+				isVerified: false,
+				displayName: '',
+				photoUrl: ''
+			});
+		})
+		.catch((error) => {
+			console.log(error);
+		});
+};
+

@@ -1,38 +1,44 @@
-# create-svelte
+## Fucntions
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
-
-## Creating a project
-
-If you're seeing this, you've probably already done this step. Congrats!
+### First Microservice
 
 ```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
+# link
+https://esi-foods-auth-api.vercel.app/api
+# source code
+https://github.com/AhmedCoolProjects/esi-foods-auth-api
 ```
 
-## Developing
+- **register**: create new account
+- **login**: login with existing account
+- **logout**: logout from current account
+- **update username**: update username of current account
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+### Second Microservice
 
 ```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+# link
+https://esi-foods-storage-api.vercel.app/api
+# source code
+https://github.com/AhmedCoolProjects/esi-foods-storage-api
 ```
 
-## Building
+- **upload file**: upload files to storage on firebase
 
-To create a production version of your app:
+### Third Microservice
 
 ```bash
-npm run build
+# link
+https://esi-foods-products.vercel.app/api
+# source code
+https://github.com/AhmedCoolProjects/esi-foods-products
 ```
 
-You can preview the production build with `npm run preview`.
+- **get all products**: get all products from database
+- **get product by id**: get product by id from database
 
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+We can also: _(only for admin)_
+
+- **add product**: add product to database
+- **update product**: update product in database
+- **delete product**: delete product from database

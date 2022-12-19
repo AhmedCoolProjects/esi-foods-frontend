@@ -16,12 +16,12 @@
 		{#each products.slice(3, 5) as product}
 			<ProductCard {product} />
 		{/each}
-		<div
+		<!-- <div
 			class="card w-full shadow-xl glass hover:scale-105 transition-all duration-300 ease-in-out cursor-pointer"
 		>
 			<div class="flex flex-col items-center justify-center w-full h-full">
 				<h1>Check More</h1>
 			</div>
-		</div>
+		</div> -->
 	</div>
 </div>

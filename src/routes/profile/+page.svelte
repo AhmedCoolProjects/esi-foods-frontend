@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { updateUsername } from '$lib/auth-api/mutation';
 	import { Navbar } from '$lib/components';
+	import { uploadProfilePicture } from '$lib/storage-api/mutation';
 	import { user } from '$lib/store';
 	import { onMount } from 'svelte';
 	import { writable, type Writable } from 'svelte/store';
@@ -16,6 +17,15 @@
 		isUpdating.set(true);
 		await updateUsername({ displayName: username }).then((res) => {
 			isUpdating.set(false);
+		});
+	};
+
+	const uploadImage = async (e: any) => {
+		const file = e.target.files[0];
+		const formData = new FormData();
+		formData.append('file', file);
+		await uploadProfilePicture(formData).then((res) => {
+			alert('Image uploaded successfully');
 		});
 	};
 </script>
@@ -34,12 +44,20 @@
 
 <Navbar />
 
-<div class="flex flex-col items-center space-y-4 w-full">
-	{#if $user.photoUrl}
-		<img src={$user.photoUrl} alt="user image" class="h-48 w-48 rounded-full" />
-	{:else}
-		<img src="/avatar.png" alt="user avatar" class="h-48 w-48 rounded-full" />
-	{/if}
+<div class="flex flex-col items-center  space-y-8 w-full">
+	<div class="flex flex-col w-fit relative z-50 items-center">
+		{#if $user.photoUrl}
+			<!-- svelte-ignore a11y-img-redundant-alt -->
+			<img src={$user.photoUrl} alt="user image" class="h-48 w-48 rounded-full" />
+		{:else}
+			<img src="/avatar.png" alt="user avatar" class="h-48 w-48 rounded-full" />
+		{/if}
+		<input
+			type="file"
+			class="absolute bottom-0 right-0 top-0 w-full h-full opacity-0 cursor-pointer"
+			on:change={uploadImage}
+		/>
+	</div>
 	<p class="underline">
 		{$user.email}
 	</p>
