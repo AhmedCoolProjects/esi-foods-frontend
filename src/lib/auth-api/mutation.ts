@@ -19,18 +19,36 @@ export async function registerUser({ email, password }: { email: string; passwor
 }
 
 export async function loginUser({ email, password }: { email: string; password: string }) {
-	 await AxiosAuthMicroservice.post('/auth/login', {
+	await AxiosAuthMicroservice.post('/auth/login', {
 		email,
 		password
 	})
-	.then((response) => {
-		user.set({
-			email: response.data.email,
-			uid: response.data.uid,
-			isVerified: response.data.isVerified
+		.then((response) => {
+			user.set({
+				email: response.data.email,
+				uid: response.data.uid,
+				isVerified: response.data.isVerified,
+				displayName: response.data.displayName,
+				photoUrl: response.data.photoUrl
+			});
+		})
+		.catch((error) => {
+			console.log(error);
 		});
+}
+
+export async function updateUsername({ displayName }: { displayName: string }) {
+	await AxiosAuthMicroservice.post('/auth/update', {
+		displayName
 	})
-	.catch((error) => {
-		console.log(error);
-	});
+		.then((response) => {
+			user.update((user) => {
+				user.displayName = displayName;
+				return user;
+			});
+			alert("Updated Username");
+		})
+		.catch((error) => {
+			console.log(error);
+		});
 }

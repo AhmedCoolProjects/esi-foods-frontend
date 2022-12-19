@@ -4,8 +4,7 @@
 
 <div class="navbar bg-base-100 p-8 flex-row items-center justify-between">
 	<div class="">
-		<!-- svelte-ignore a11y-missing-attribute -->
-		<a class="btn btn-ghost normal-case items-center justify-center flex flex-col text-xl">
+		<a href="/" class="btn btn-ghost normal-case items-center justify-center flex flex-col text-xl">
 			<img src="./logo.svg" alt="logo" class="h-24 w-24 object-contain" />
 		</a>
 	</div>
@@ -23,7 +22,11 @@
 	<div class="flex-none gap-2">
 		<p>
 			{#if $user.uid}
-				{$user.email}
+				{#if $user.displayName}
+					{$user.displayName}
+				{:else}
+					{$user.email}
+				{/if}
 			{/if}
 		</p>
 		<div class="dropdown dropdown-end">
@@ -35,13 +38,11 @@
 				class="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52"
 			>
 				<li>
-					<a href="/auth">
-						{#if $user.uid}
-							Profile
-						{:else}
-							Login
-						{/if}
-					</a>
+					{#if $user.uid}
+						<a href="/profile"> Profile </a>
+					{:else}
+						<a href="/auth"> Login </a>
+					{/if}
 				</li>
 				<li><a>Settings</a></li>
 				<li><a>Logout</a></li>
